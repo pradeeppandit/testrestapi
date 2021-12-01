@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c557473c-23b2-4a31-9cbe-1db5fb96d059" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2d62dc07-3a21-458c-9158-6004e18d085b" basePath="/api/v1/employees">
+		<http:request-connection host="dummy.restapiexample.com" port="80">
+		</http:request-connection>
+	</http:request-config>
+	<flow name="sample_rest_apiFlow" doc:id="0df167fb-60cb-4879-9a3c-76f3b809e047" >
+		<http:listener doc:name="Listener" doc:id="cd6b4cc6-50b2-4551-9e39-f2ed8d4b129b" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value='{"Id": 78912,"Quantity": 1,"Price": 18.00}' doc:name="Set Payload" doc:id="44060855-7176-4de1-83e9-0c95ec233995" mimeType="application/json"/>
+		<http:request method="GET" doc:name="Request" doc:id="54ea0d1c-9365-4d49-b2d2-e40033813d9d" config-ref="HTTP_Request_configuration" path="/">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="6f83bb2c-6bed-4bd5-bb4c-976cd610ad28" />
+	</flow>
+</mule>
